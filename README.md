@@ -7,11 +7,15 @@ Aplicación de chat en tiempo real desarrollada con **Laravel**, **Livewire** y 
 ## 🚀 Tecnologías principales
 
 - **Laravel 11** — Framework backend principal.
-- **Livewire** — Renderizado reactivo sin necesidad de JavaScript adicional.
-- **Pusher** — Comunicación en tiempo real para el envío y recepción instantánea de mensajes.
-- **Blade** — Motor de plantillas utilizado para la vista principal del chat.
-- **SQLite / MySQL** — Base de datos (configurable).
-- **Tailwind CSS** — Estilos visuales limpios y modernos.
+- **Livewire 3** — Renderizado reactivo.
+- **Laravel Reverb** — Implementación nativa de WebSockets en Laravel.
+- **WebSocket** — Canal de comunicación en tiempo real.
+- **Alpine.js** — Interactividad ligera en el frontend junto con Livewire.
+- **Vite** — Herramienta de build.
+- **Breeze** — Sistema de autenticación.
+- **Blade** — Motor de plantillas para vistas.
+- **Tailwind CSS** — Framework de estilos.
+- **SQLite / MySQL** — Base de datos.
 
 ---
 
