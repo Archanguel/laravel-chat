@@ -75,11 +75,10 @@
     <!-- Right: usuarios -->
     <div class="w-[10%] border-l p-3 flex-shrink-0 h-full overflow-auto">
         <h3 class="font-bold mb-3">Usuarios en la sala</h3>
-        @php
-            $usersInRoom = collect($messages)->pluck('user_name')->unique();
-        @endphp
         @foreach($usersInRoom as $u)
-            <div class="p-1 truncate" title="{{ $u }}">{{ $u }}</div>
+            <div class="p-1 truncate" title="{{ $u['name'] ?? $u['user_name'] }}">
+                {{ $u['name'] ?? $u['user_name'] }}
+            </div>
         @endforeach
     </div>
 
@@ -89,10 +88,21 @@
 
     <script>
         document.addEventListener('livewire:load', function () {
+            // Scroll automático
             Livewire.hook('message.processed', (message, component) => {
                 const el = document.getElementById('messages');
                 if (el) el.scrollTop = el.scrollHeight;
             });
+
+            // Mensajes en tiempo real
+            document.addEventListener('realtime-message', e => {
+                Livewire.emit('realtime-message', e.detail);
+            });
+
+            // Usuarios en tiempo real
+            document.addEventListener('update-users', e => Livewire.emit('updateUsers', e.detail));
+            document.addEventListener('add-user', e => Livewire.emit('addUser', e.detail));
+            document.addEventListener('remove-user', e => Livewire.emit('removeUser', e.detail));
         });
 
         document.addEventListener('input', e => {

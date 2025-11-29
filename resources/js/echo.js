@@ -10,8 +10,13 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-window.Echo.channel('chat').listen('MessageSent', (e) => {
-    // e contiene id, user_name, body, created_at según broadcastWith()
-    // emitimos un evento para que Livewire o Alpine lo capture
-    window.dispatchEvent(new CustomEvent('realtime-message', { detail: e }));
+// Canal de mensajes
+window.Echo.channel('chat').listen('.message.sent', (e) => {
+    window.dispatchEvent(new CustomEvent('realtime-message', { detail: e.message }));
 });
+
+// Canal de presencia
+window.Echo.join('presence-chatroom')
+    .here(users => window.dispatchEvent(new CustomEvent('update-users', { detail: users })))
+    .joining(user => window.dispatchEvent(new CustomEvent('add-user', { detail: user })))
+    .leaving(user => window.dispatchEvent(new CustomEvent('remove-user', { detail: user })));

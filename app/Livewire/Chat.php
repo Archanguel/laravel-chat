@@ -50,7 +50,7 @@ class Chat extends Component
                 'user_name' => $m->user->name,
                 'body' => $m->body,
                 'edited' => $m->edited,
-                'created_at' => $m->created_at->toDateTimeString(),
+                'created_at' => $m->created_at->format('d/m/Y G:i'),
             ])
             ->toArray();
     }
@@ -87,7 +87,7 @@ class Chat extends Component
             'user_name' => $user->name,
             'body' => $message->body,
             'edited' => false,
-            'created_at' => $message->created_at->toDateTimeString(),
+            'created_at' => $message->created_at->format('d/m/Y G:i'),
         ];
 
         // Enviar a otros (Reverb)
@@ -146,5 +146,72 @@ class Chat extends Component
     public function render()
     {
         return view('livewire.chat');
+    }
+
+    /*protected $listeners = [
+        'realtime-message' => 'handleRealtimeMessage',
+        'updateUsers' => 'updateUsers',
+        'addUser' => 'addUser',
+        'removeUser' => 'removeUser',
+    ];
+
+    public function handleRealtimeMessage($event)
+    {
+        // $event es lo que mandó broadcastWith()
+        $this->messages[] = [
+            'id' => $event['id'],
+            'user_id' => $event['user_id'],
+            'user_name' => $event['user_name'],
+            'body' => $event['body'],
+            'edited' => $event['edited'] ?? false,
+            'created_at' => \Carbon\Carbon::parse($event['created_at'])->format('d/m/Y H:i'),
+        ];
+    }
+
+    public $usersInRoom = [];
+
+    public function updateUsers($users) {
+        $this->usersInRoom = $users;
+    }
+
+    public function addUser($user) {
+        $this->usersInRoom[] = $user;
+    }
+
+    public function removeUser($user) {
+        $this->usersInRoom = array_filter($this->usersInRoom, fn($u) => $u['id'] != $user['id']);
+    }*/
+
+    protected $listeners = [
+        'realtime-message' => 'handleRealtimeMessage',
+        'updateUsers' => 'updateUsers',
+        'addUser' => 'addUser',
+        'removeUser' => 'removeUser',
+    ];
+
+    public $usersInRoom = [];
+
+    public function handleRealtimeMessage($event)
+    {
+        $this->messages[] = [
+            'id' => $event['id'],
+            'user_id' => $event['user_id'],
+            'user_name' => $event['user_name'],
+            'body' => $event['body'],
+            'edited' => $event['edited'] ?? false,
+            'created_at' => \Carbon\Carbon::parse($event['created_at'])->format('d/m/Y G:i'),
+        ];
+    }
+
+    public function updateUsers($users) {
+        $this->usersInRoom = $users;
+    }
+
+    public function addUser($user) {
+        $this->usersInRoom[] = $user;
+    }
+
+    public function removeUser($user) {
+        $this->usersInRoom = array_filter($this->usersInRoom, fn($u) => $u['id'] != $user['id']);
     }
 }
